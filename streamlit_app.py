@@ -17,7 +17,6 @@ from sklearn import metrics
 
 
 df = pd.read_excel('https://raw.githubusercontent.com/arypr/Prediksi-Harga-Rumah-Tebet-app/main/DATA%20RUMAH%20(1).xlsx')
-``
 
 
 
