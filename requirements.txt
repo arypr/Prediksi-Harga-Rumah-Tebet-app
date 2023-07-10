@@ -5,6 +5,4 @@ seaborn
 matplotlib
 seaborn
 scikit-learn
-projek_pi_prediksihargarumah
-df
-mlr
+from projek_pi_prediksihargarumah import df, mlr
