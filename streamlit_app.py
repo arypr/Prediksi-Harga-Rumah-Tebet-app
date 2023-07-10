@@ -16,7 +16,8 @@ from sklearn import metrics
 # In[3]:
 
 
-df = pd.read_excel('https://github.com/arypr/Prediksi-Harga-Rumah-Tebet-app/blob/main/DATA RUMAH (1).xlsx')
+df = pd.read_excel('https://raw.githubusercontent.com/arypr/Prediksi-Harga-Rumah-Tebet-app/main/DATA RUMAH (1).xlsx')
+
 
 
 # Berikut merupakan atribut dalam dataset DATA RUMAH (1), yaitu:
