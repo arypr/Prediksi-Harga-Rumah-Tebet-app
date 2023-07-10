@@ -16,7 +16,7 @@ from sklearn import metrics
 # In[3]:
 
 
-df = pd.read_excel (r'C:\Users\arypr\Downloads\DATA RUMAH (1) (1).xlsx')
+df = pd.read_excel('https://raw.githubusercontent.com/username/repository/main/DATA RUMAH (1).xlsx')
 
 
 # Berikut merupakan atribut dalam dataset DATA RUMAH (1), yaitu:
