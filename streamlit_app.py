@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import pickle
 
-df = pd.read_excel ('https://raw.githubusercontent.com/arypr/Prediksi-Harga-Rumah-Tebet-app/main/data_bersih%20(1)xlsx')
+df = pd.read_excel ('https://github.com/arypr/Prediksi-Harga-Rumah-Tebet-app/blob/main/data_bersih%20(1).xlsx')
 
 model = LinearRegression()
 
