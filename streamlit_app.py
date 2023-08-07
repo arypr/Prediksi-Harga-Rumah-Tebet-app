@@ -85,6 +85,7 @@ if button:
         st.write("Hasil tidak ditemukan")
     else:
         # Mengambil dataframe nama rumah dan harga aktual
+        nama_rumah = df['NAMA RUMAH']
         harga_aktual = df['HARGA']
         luas_bangunan = df['LB']
         luas_tanah = df['LT']
@@ -97,7 +98,7 @@ if button:
     
 
         # Membuat dataframe hasil prediksi dengan harga yang tidak jauh berbeda
-        hasil_prediksi = pd.DataFrame({'Harga Aktual': harga_aktual, 'Selisih': selisih, 'LB': luas_bangunan, 'LT': luas_tanah, 'KT': kamar_tidur, 'KM': kamar_mandi, 'Garasi': garasi})
+        hasil_prediksi = pd.DataFrame({'NAMA RUMAH': nama_rumah, 'Harga Aktual': harga_aktual, 'Selisih': selisih, 'LB': luas_bangunan, 'LT': luas_tanah, 'KT': kamar_tidur, 'KM': kamar_mandi, 'Garasi': garasi})
         hasil_prediksi = hasil_prediksi[hasil_prediksi['Selisih'] <= selisih_minimal]  # Menggunakan selisih_minimal
         hasil_prediksi = hasil_prediksi[(hasil_prediksi['Selisih'] <= selisih_minimal) & 
                                 (hasil_prediksi['LB'] <= selisih_minimal) & 
