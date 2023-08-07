@@ -62,7 +62,7 @@ if lt:
 
 
 # Menampilkan input jumlah kamar tidur (KT)
-kt = st.sidebar.selectbox("Jumlah Kamar Tidur", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+kt = st.sidebar.selectbox("Jumlah Kamar Tidur", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 # Menampilkan input jumlah kamar mandi (KM)
 km = st.sidebar.selectbox("Jumlah Kamar Mandi", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
