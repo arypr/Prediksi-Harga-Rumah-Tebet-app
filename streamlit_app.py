@@ -36,7 +36,7 @@ st.write("""
 # Membuat sidebar
 st.sidebar.header("Input Data")
 
-lb = st.sidebar.text_input("Luas Bangunan (m2)", value=str(df["LB"].min()))
+lb = st.sidebar.text_input("Luas Bangunan (m2)", value="")
 
 # Validasi input lb sebagai angka positif
 if lb:
@@ -47,7 +47,7 @@ if lb:
     except ValueError:
         st.sidebar.error("Masukkan angka yang valid untuk Luas Bangunan (LB)")
 
-lt = st.sidebar.text_input("Luas Tanah (m2)", value=str(df["LT"].min()))
+lt = st.sidebar.text_input("Luas Tanah (m2)", value="")
 
 # Validasi input lt sebagai angka positif
 if lt:
