@@ -62,13 +62,13 @@ if lt:
 
 
 # Menampilkan input jumlah kamar tidur (KT)
-kt = st.sidebar.selectbox("Jumlah Kamar Tidur", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+kt = st.sidebar.selectbox("Jumlah Kamar Tidur", [0, 1, 2, 3, 4, 5, 6])
 
 # Menampilkan input jumlah kamar mandi (KM)
-km = st.sidebar.selectbox("Jumlah Kamar Mandi", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+km = st.sidebar.selectbox("Jumlah Kamar Mandi", [0, 1, 2, 3, 4, 5])
 
 # Menampilkan input kapasitas mobil dalam garasi (GRS)
-grs = st.sidebar.selectbox("Kapasitas Mobil dalam Garasi", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+grs = st.sidebar.selectbox("Kapasitas Mobil dalam Garasi", [0, 1, 2, 3])
 
 # Menampilkan tombol untuk memproses input pengguna
 button = st.sidebar.button("Prediksi")
