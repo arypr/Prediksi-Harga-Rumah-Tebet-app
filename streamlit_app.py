@@ -41,10 +41,10 @@ print("Multiple Linear Regression:")
 print(f"R-squared: {r2}")
 
 import pickle
-with open('model_linreg.pkl', 'wb') as model_file:
+with open('model_regression.pkl', 'wb') as model_file:
     pickle.dump(model, model_file)
 
-with open('model_linreg.pkl', 'rb') as model_file:
+with open('model_regression.pkl', 'rb') as model_file:
     loaded_model = pickle.load(model_file)
 
 
