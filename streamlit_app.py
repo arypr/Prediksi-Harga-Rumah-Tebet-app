@@ -1,117 +1,100 @@
+# Import Library
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import streamlit as st
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
-import pickle
 
-df = pd.read_excel('https://raw.githubusercontent.com/arypr/Prediksi-Harga-Rumah-Tebet-app/main/df_bersih_1.xlsx', engine='openpyxl')
+# Load Dataset
+df = pd.read_excel(r'C:\Users\arypr\Downloads\df_prediksi.xlsx')
 
+
+# Pembuatan Model
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Misalkan X dan y adalah data Anda
+X = df[['LB', 'LT', 'KT', 'KM','GRS']]
+y = df['HARGA']
+
+# Bagi data menjadi data latih dan data uji
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Buat model regresi linear berganda
 model = LinearRegression()
 
-# Menyimpan model ke dalam file menggunakan pickle
-with open('modelku.pkl', 'wb') as file:
-    pickle.dump(model, file)
-    
-with open('modelku.pkl', 'rb') as file:
-    model = pickle.load(file)
+# Latih model dengan data latih
+model.fit(X_train, y_train)
 
-# Fungsi untuk melakukan prediksi harga rumah
-def predict_price(lb, lt, kt, km, grs):
-    # Memuat model yang telah dilatih sebelumnya
-    model = LinearRegression()
-    model.fit(df[["LB", "LT", "KT", "KM", "GRS"]], df["HARGA"])
-    # Melakukan prediksi harga rumah berdasarkan input pengguna
-    prediction = model.predict([[lb, lt, kt, km, grs]])
-    return prediction[0]
+# Lakukan prediksi pada data uji
+y_pred = model.predict(X_test)
 
-# Menampilkan header dan judul
-st.write("""
-# Prediksi Harga Rumah Tebet
-""")
+# Evaluasi model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
 
-# Membuat sidebar
-st.sidebar.header("Input Data")
+print("Multiple Linear Regression:")
+print(f"R-squared: {r2}")
 
-lb = st.sidebar.text_input("Luas Bangunan (m2)", value="")
+import pickle
+with open('model_linreg.pkl', 'wb') as model_file:
+    pickle.dump(model, model_file)
 
-# Validasi input lb sebagai angka positif
-if lb:
-    try:
-        lb = float(lb)
-        if lb < 0:
-            st.sidebar.error("Luas bangunan tidak boleh negatif")
-    except ValueError:
-        st.sidebar.error("Masukkan angka yang valid untuk Luas Bangunan (LB)")
-
-lt = st.sidebar.text_input("Luas Tanah (m2)", value="")
-
-# Validasi input lt sebagai angka positif
-if lt:
-    try:
-        lt = float(lt)
-        if lt < 0:
-            st.sidebar.error("Luas tanah tidak boleh negatif")
-    except ValueError:
-        st.sidebar.error("Masukkan angka yang valid untuk Luas Tanah (LT)")
+with open('model_linreg.pkl', 'rb') as model_file:
+    loaded_model = pickle.load(model_file)
 
 
+# Uji Model
+import math
 
+print("Rumah impian shani berkisar pada harga IDR {:,} juta".format(math.floor(model.predict([[100, 120, 2, 2, 1]])/1000000)))
 
-# Menampilkan input jumlah kamar tidur (KT)
-kt = st.sidebar.selectbox("Jumlah Kamar Tidur", [0, 1, 2, 3, 4, 5, 6])
+# Pembuatan Web App
+import streamlit as st
 
-# Menampilkan input jumlah kamar mandi (KM)
-km = st.sidebar.selectbox("Jumlah Kamar Mandi", [0, 1, 2, 3, 4, 5])
+def predict_price(features):
+    predicted_price = model.predict([features])
+    return predicted_price[0]
 
-# Menampilkan input kapasitas mobil dalam garasi (GRS)
-grs = st.sidebar.selectbox("Kapasitas Mobil dalam Garasi", [0, 1, 2, 3])
+# Fungsi untuk menghitung perbedaan antara harga prediksi dan harga asli dalam dataset
+def calculate_feature_difference(predicted_features, original_features):
+    return abs(predicted_features - original_features)
 
-# Menampilkan tombol untuk memproses input pengguna
-button = st.sidebar.button("Prediksi")
+# Tampilan aplikasi Streamlit
+st.title('Prediksi Harga Rumah Tebet')
 
-# Menampilkan hasil prediksi harga rumah jika tombol "Prediksi" ditekan
-if button:
-    price = predict_price(lb, lt, kt, km, grs)
-    formatted_price = float(price)  # Mengubah ke tipe data numerik
+# Masukkan fitur-fitur di dalam sidebar
+with st.sidebar:
 
-    # Validasi hasil prediksi
-    min_harga_aktual = df["HARGA"].min()
-    selisih_minimal = 0.05 * min_harga_aktual
-    if formatted_price < (min_harga_aktual - selisih_minimal):
-        st.write("Hasil tidak ditemukan")
-    else:
-        # Mengambil dataframe nama rumah dan harga aktual
-        nama_rumah = df['NAMA RUMAH']
-        harga_aktual = df['HARGA']
-        luas_bangunan = df['LB']
-        luas_tanah = df['LT']
-        kamar_tidur = df['KT']
-        kamar_mandi = df['KM']
-        garasi = df['GRS']
+    st.title('Input Data')
+    lb = st.number_input('Luas Bangunan', min_value=0)
+    lt = st.number_input('Luas Tanah', min_value=0)
+    kt = st.number_input('Jumlah Kamar Tidur', min_value=0)
+    km = st.number_input('Jumlah Kamar Mandi', min_value=0)
+    grs = st.number_input('Jumlah Garasi', min_value=0)
+    predict_button = st.button('Prediksi')
 
-        # Menghitung selisih antara harga aktual dan harga prediksi
-        selisih = abs(harga_aktual - formatted_price)  # Menggunakan formatted_price
-    
+# Jika tombol prediksi ditekan
+if predict_button:
+    features = np.array([lb, lt, kt, km, grs])
+    predicted_price = predict_price(features)
+    formatted_price = "Rp {:,.2f}".format(predicted_price)
+    st.write(f'Prediksi Harga: {formatted_price}')
 
-        # Membuat dataframe hasil prediksi dengan harga yang tidak jauh berbeda
-        hasil_prediksi = pd.DataFrame({'NAMA RUMAH': nama_rumah, 'Harga Aktual': harga_aktual, 'Selisih': selisih, 'LB': luas_bangunan, 'LT': luas_tanah, 'KT': kamar_tidur, 'KM': kamar_mandi, 'Garasi': garasi})
-        hasil_prediksi = hasil_prediksi[hasil_prediksi['Selisih'] <= selisih_minimal]  # Menggunakan selisih_minimal
-        hasil_prediksi = hasil_prediksi[(hasil_prediksi['Selisih'] <= selisih_minimal) & 
-                                (hasil_prediksi['LB'] <= selisih_minimal) & 
-                                (hasil_prediksi['LT'] <= selisih_minimal) & 
-                                (hasil_prediksi['KT'] <= selisih_minimal) & 
-                                (hasil_prediksi['KM'] <= selisih_minimal) & 
-                                (hasil_prediksi['Garasi'] <= selisih_minimal)]
+    # Hitung perbedaan nilai fitur-fitur dalam dataset dengan nilai fitur-fitur yang diinputkan
+    feature_diff = calculate_feature_difference(X.values, features)
 
-        # Menampilkan dataframe hasil prediksi jika data ditemukan
-        if not hasil_prediksi.empty:
-            fp2 = "{:,.2f}".format(float(price))
-            st.write("Harga rumah yang diprediksi adalah Rp.", fp2)
-            st.write("Daftar Rumah Rekomendasi Sesuai Harga Prediksi:")
-            st.dataframe(hasil_prediksi)
-        else:
-            st.write("Hasil tidak ditemukan")
+    # Tentukan batas maksimal perbedaan untuk setiap fitur
+    max_feature_diff = np.array([50, 50, 1, 1, 1])
+
+    # Cari indeks rumah-rumah yang memenuhi batas perbedaan fitur
+    similar_houses = np.all(feature_diff <= max_feature_diff, axis=1)
+
+    # Tampilkan rumah-rumah yang sesuai dengan kriteria
+    similar_houses_df = df[similar_houses]
+    st.write('Rumah-rumah yang Sesuai:')
+    st.dataframe(similar_houses_df)
