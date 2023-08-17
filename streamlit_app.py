@@ -10,59 +10,28 @@ from sklearn import metrics
 # Load Dataset
 df = pd.read_excel('https://raw.githubusercontent.com/arypr/Prediksi-Harga-Rumah-Tebet-app/main/df_prediksi.xlsx', engine='openpyxl')
 
-
-# Pembuatan Model
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
-
-# Misalkan X dan y adalah data Anda
-X = df[['LB', 'LT', 'KT', 'KM','GRS']]
+X= df[['LB', 'LT', 'KT', 'KM', 'GRS']]
 y = df['HARGA']
 
-# Bagi data menjadi data latih dan data uji
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Buat model regresi linear berganda
-model = LinearRegression()
-
-# Latih model dengan data latih
-model.fit(X_train, y_train)
-
-# Lakukan prediksi pada data uji
-y_pred = model.predict(X_test)
-
-# Evaluasi model
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
-
-print("Multiple Linear Regression:")
-print(f"R-squared: {r2}")
+df.drop(columns='Unnamed: 0', inplace=True)
 
 import pickle
-with open('model_regression.pkl', 'wb') as model_file:
-    pickle.dump(model, model_file)
 
 with open('model_regression.pkl', 'rb') as model_file:
     loaded_model = pickle.load(model_file)
 
-
-# Uji Model
-import math
-
-print("Rumah impian shani berkisar pada harga IDR {:,} juta".format(math.floor(model.predict([[100, 120, 2, 2, 1]])/1000000)))
-
-# Pembuatan Web App
 import streamlit as st
 
 def predict_price(features):
-    predicted_price = model.predict([features])
+    predicted_price = loaded_model.predict([features])
     return predicted_price[0]
 
 # Fungsi untuk menghitung perbedaan antara harga prediksi dan harga asli dalam dataset
 def calculate_feature_difference(predicted_features, original_features):
     return abs(predicted_features - original_features)
+
+def calculate_price_difference(predicted_price, original_price):
+    return abs(predicted_price - original_price) / original_price
 
 # Tampilan aplikasi Streamlit
 st.title('Prediksi Harga Rumah Tebet')
@@ -89,7 +58,7 @@ if predict_button:
     feature_diff = calculate_feature_difference(X.values, features)
 
     # Tentukan batas maksimal perbedaan untuk setiap fitur
-    max_feature_diff = np.array([50, 50, 1, 1, 1])
+    max_feature_diff = np.array([40, 40, 1, 1, 1])
 
     # Cari indeks rumah-rumah yang memenuhi batas perbedaan fitur
     similar_houses = np.all(feature_diff <= max_feature_diff, axis=1)
