@@ -53,7 +53,7 @@ if predict_button:
     predicted_price = predict_price(features)
 
     if predicted_price < 0:
-        st.write('Tidak Ditemukan')
+        st.write('Hasil Tidak Ditemukan')
     else:
         formatted_price = "Rp {:,.2f}".format(predicted_price)
         st.write(f'Prediksi Harga: {formatted_price}')
