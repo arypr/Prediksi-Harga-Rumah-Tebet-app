@@ -8,8 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 
 # Load Dataset
-url = 'https://github.com/arypr/Prediksi-Harga-Rumah-Tebet-app/blob/main/df_prediksi.xlsx'
-df = pd.read_excel(url, engine='openpyxl')
+df = pd.read_excel("https://github.com/arypr/Prediksi-Harga-Rumah-Tebet-app/blob/main/df_prediksi.xlsx", engine="openpyxl")
 
 X= df[['LB', 'LT', 'KT', 'KM', 'GRS']]
 y = df['HARGA']
