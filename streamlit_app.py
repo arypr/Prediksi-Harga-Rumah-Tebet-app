@@ -71,5 +71,3 @@ if predict_button:
         similar_houses_df = df[similar_houses]
         st.write('Rumah-rumah yang Sesuai:')
         st.dataframe(similar_houses_df)
-        st.write('Rumah-rumah yang Sesuai:')
-        st.dataframe(similar_houses_df)
