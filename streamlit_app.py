@@ -69,8 +69,7 @@ if predict_button:
 
         # Tampilkan rumah-rumah yang sesuai dengan kriteria
         similar_houses_df = df[similar_houses]
-        # Set lebar tampilan DataFrame agar semua informasi bisa ditampilkan
         st.write('Rumah-rumah yang Sesuai:')
-        st.dataframe(similar_houses_df, width=800)  # Sesuaikan lebar (misalnya 800) sesuai kebutuhan
+        st.dataframe(similar_houses_df)
         st.write('Rumah-rumah yang Sesuai:')
         st.dataframe(similar_houses_df)
