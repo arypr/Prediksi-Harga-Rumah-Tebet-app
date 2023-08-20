@@ -51,19 +51,23 @@ with st.sidebar:
 if predict_button:
     features = np.array([lb, lt, kt, km, grs])
     predicted_price = predict_price(features)
-    formatted_price = "Rp {:,.2f}".format(predicted_price)
-    st.write(f'Prediksi Harga: {formatted_price}')
 
-    # Hitung perbedaan nilai fitur-fitur dalam dataset dengan nilai fitur-fitur yang diinputkan
-    feature_diff = calculate_feature_difference(X.values, features)
+    if predicted_price < 0:
+        st.write('Tidak Ditemukan')
+    else:
+        formatted_price = "Rp {:,.2f}".format(predicted_price)
+        st.write(f'Prediksi Harga: {formatted_price}')
 
-    # Tentukan batas maksimal perbedaan untuk setiap fitur
-    max_feature_diff = np.array([40, 40, 1, 1, 1])
+        # Hitung perbedaan nilai fitur-fitur dalam dataset dengan nilai fitur-fitur yang diinputkan
+        feature_diff = calculate_feature_difference(X.values, features)
 
-    # Cari indeks rumah-rumah yang memenuhi batas perbedaan fitur
-    similar_houses = np.all(feature_diff <= max_feature_diff, axis=1)
+        # Tentukan batas maksimal perbedaan untuk setiap fitur
+        max_feature_diff = np.array([40, 40, 1, 1, 1])
 
-    # Tampilkan rumah-rumah yang sesuai dengan kriteria
-    similar_houses_df = df[similar_houses]
-    st.write('Rumah-rumah yang Sesuai:')
-    st.dataframe(similar_houses_df)
+        # Cari indeks rumah-rumah yang memenuhi batas perbedaan fitur
+        similar_houses = np.all(feature_diff <= max_feature_diff, axis=1)
+
+        # Tampilkan rumah-rumah yang sesuai dengan kriteria
+        similar_houses_df = df[similar_houses]
+        st.write('Rumah-rumah yang Sesuai:')
+        st.dataframe(similar_houses_df)
